@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import api from "../axios/axios";
-
-// Imports para criação de tabela
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import CssBaseline from "@mui/material/CssBaseline";
+import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
-
-// TableHead é onde colocamos os titulos
 import TableHead from "@mui/material/TableHead";
-
-// TableBody é onde colocamos o conteúdo
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
@@ -18,7 +16,6 @@ function listOrganizadores() {
   const [organizadores, setOrganizadores] = useState([]);
 
   async function getOrganizadores() {
-    // Chamada API
     await api.getOrganizadores().then(
       (response) => {
         console.log(response.data.orgs);
@@ -30,7 +27,7 @@ function listOrganizadores() {
     );
   }
 
-  const listOrganizadores = organizadores.map((organizador) => {
+  const listOrganizadoresRows = organizadores.map((organizador) => {
     return (
       <TableRow key={organizador.id_organizador}>
         <TableCell align="center">{organizador.nome}</TableCell>
@@ -46,23 +43,82 @@ function listOrganizadores() {
   }, []);
 
   return (
-    <div>
-      <h5>Lista de Organizadores</h5>
-      <TableContainer component={Paper} style={{ margin: "2px" }}>
-        <Table size="small">
-          <TableHead style={{ backgroundColor: "gray", border: "solid" }}>
-            <TableRow>
-              <TableCell align="center">Nome</TableCell>
-              <TableCell align="center">E-mail</TableCell>
-              <TableCell align="center">Telefone</TableCell>
-              <TableCell align="center">Senha</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>{listOrganizadores}</TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container maxWidth="md">
+        <Typography variant="h5" gutterBottom>
+          Lista de Organizadores
+        </Typography>
+        <TableContainer component={Paper} style={{ width: "100%" }}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Nome</TableCell>
+                <TableCell align="center">E-mail</TableCell>
+                <TableCell align="center">Telefone</TableCell>
+                <TableCell align="center">Senha</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>{listOrganizadoresRows}</TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
+    </ThemeProvider>
   );
 }
+
+const theme = createTheme({
+  palette: {
+    mode: "light",
+    primary: {
+      main: "#000",
+    },
+    background: {
+      default: "#fff",
+      paper: "#fff",
+    },
+    text: {
+      primary: "#000",
+    },
+  },
+  typography: {
+    fontFamily: "Roboto Mono, monospace",
+  },
+  components: {
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          minHeight: "100vh",
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          marginBottom: "16px",
+          textAlign: "center",
+        },
+      },
+    },
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#f0f0f0",
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+        },
+      },
+    },
+  },
+});
 
 export default listOrganizadores;
