@@ -7,6 +7,7 @@ import ListOrganizadores from "./pages/listOrganizadores";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -19,8 +20,8 @@ function App() {
           <Route path="/usuarios" element={<ListUsuarios />} />
           <Route path="/eventos" element={<ListEventos />} />
           <Route path="/ingressos" element={<ListIngressos />} />
-          <Route path="/organizadores" element={<ListOrganizadores />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/organizadores" element={<ProtectedRoute><ListOrganizadores /></ProtectedRoute>} />
+          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </div>

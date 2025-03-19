@@ -110,7 +110,8 @@ const theme = createTheme({
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "flex-start", // Alterado para flex-start para alinhar ao topo
+          marginTop: 50,
+          justifyContent: "flex-start",
           minHeight: "100vh",
         },
       },

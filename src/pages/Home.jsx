@@ -1,13 +1,19 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
 import Button from "@mui/material/Button";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import Typography from "@mui/material/Typography";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function Home() {
-  const [auth, setAuth] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("authenticated")) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import Table from '@mui/material/Table';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import Paper from '@mui/material/Paper';
-import api from '../axios/axios';
-import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import Table from "@mui/material/Table";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Paper from "@mui/material/Paper";
+import api from "../axios/axios";
+import { Button } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,6 +16,7 @@ import Container from "@mui/material/Container";
 
 function listUsuarios() {
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
   async function getUsers() {
     await api.getUsers().then(
@@ -40,6 +41,9 @@ function listUsuarios() {
   });
 
   useEffect(() => {
+    if (!localStorage.getItem("authenticated")) {
+      navigate("/");
+    }
     getUsers();
   }, []);
 
@@ -82,68 +86,69 @@ function listUsuarios() {
 }
 
 const theme = createTheme({
-    palette: {
-      mode: "light",
-      primary: {
-        main: "#000",
-      },
-      background: {
-        default: "#fff",
-        paper: "#fff",
-      },
-      text: {
-        primary: "#000",
-      },
+  palette: {
+    mode: "light",
+    primary: {
+      main: "#000",
     },
-    typography: {
-      fontFamily: "Roboto Mono, monospace",
+    background: {
+      default: "#fff",
+      paper: "#fff",
     },
-    components: {
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            color: "#000",
-            borderColor: "#000",
-            "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
-            },
-          },
-        },
-      },
-      MuiContainer: {
-        styleOverrides: {
-          root: {
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            minHeight: "100vh",
-          },
-        },
-      },
-      MuiTypography: {
-        styleOverrides: {
-          root: {
-            marginBottom: "16px",
-            textAlign: "center",
-          },
-        },
-      },
-      MuiTableHead: {
-        styleOverrides: {
-          root: {
-            backgroundColor: "#f0f0f0",
-          },
-        },
-      },
-      MuiTableCell: {
-        styleOverrides: {
-          root: {
-            borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+    text: {
+      primary: "#000",
+    },
+  },
+  typography: {
+    fontFamily: "Roboto Mono, monospace",
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          color: "#000",
+          borderColor: "#000",
+          "&:hover": {
+            backgroundColor: "rgba(0, 0, 0, 0.1)",
           },
         },
       },
     },
-  });
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          marginTop: 50,
+          justifyContent: "flex-start",
+          minHeight: "100vh",
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          marginBottom: "16px",
+          textAlign: "center",
+        },
+      },
+    },
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#f0f0f0",
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+        },
+      },
+    },
+  },
+});
 
 export default listUsuarios;
