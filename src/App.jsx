@@ -17,9 +17,9 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/evento/novo" element={<PostEvento />} />
-          <Route path="/usuarios" element={<ListUsuarios />} />
-          <Route path="/eventos" element={<ListEventos />} />
-          <Route path="/ingressos" element={<ListIngressos />} />
+          <Route path="/usuarios" element={<ProtectedRoute><ListUsuarios /></ProtectedRoute>} />
+          <Route path="/eventos" element={<ProtectedRoute><ListEventos /></ProtectedRoute>} />
+          <Route path="/ingressos" element={<ProtectedRoute><ListIngressos /></ProtectedRoute>} />
           <Route path="/organizadores" element={<ProtectedRoute><ListOrganizadores /></ProtectedRoute>} />
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         </Routes>

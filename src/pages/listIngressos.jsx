@@ -38,6 +38,9 @@ function listIngressos() {
 
   useEffect(() => {
     getIngressos();
+    if (!localStorage.getItem("authenticated")) {
+      navigate("/");
+    }
   }, []);
 
   return (

@@ -41,10 +41,10 @@ function listUsuarios() {
   });
 
   useEffect(() => {
+    getUsers();
     if (!localStorage.getItem("authenticated")) {
       navigate("/");
     }
-    getUsers();
   }, []);
 
   return (

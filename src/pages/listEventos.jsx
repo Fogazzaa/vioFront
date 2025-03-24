@@ -42,6 +42,9 @@ function listEventos() {
 
   useEffect(() => {
     getEventos();
+    if (!localStorage.getItem("authenticated")) {
+      navigate("/");
+    }
   }, []);
 
   return (

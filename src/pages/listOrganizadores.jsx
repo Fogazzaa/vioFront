@@ -40,6 +40,9 @@ function listOrganizadores() {
 
   useEffect(() => {
     getOrganizadores();
+    if (!localStorage.getItem("authenticated")) {
+      navigate("/");
+    }
   }, []);
 
   return (
