@@ -8,7 +8,7 @@ const Footer = () => {
       sx={{
         backgroundColor: "gray",
         width: "100%",
-        height: "40px",
+        height: "55px",
         position: "fixed",
         bottom: 0,
       }}

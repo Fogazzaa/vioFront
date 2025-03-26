@@ -1,19 +1,22 @@
-import { useState, useEffect } from "react";
-import api from "../axios/axios";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import CssBaseline from "@mui/material/CssBaseline";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import Paper from "@mui/material/Paper";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../axios/axios";
 
 function listIngressos() {
   const [ingressos, setIngressos] = useState([]);
+  const navigate = useNavigate();
 
   async function getIngressos() {
     await api.getIngressos().then(
@@ -43,6 +46,11 @@ function listIngressos() {
     }
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("authenticated");
+    navigate("/"); // Redireciona para a página inicial
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -61,6 +69,13 @@ function listIngressos() {
             <TableBody>{listIngressosRows}</TableBody>
           </Table>
         </TableContainer>
+        <Button
+          variant="outlined"
+          onClick={handleLogout}
+          style={{ marginTop: "20px" }}
+        >
+          SAIR
+        </Button>
       </Container>
     </ThemeProvider>
   );

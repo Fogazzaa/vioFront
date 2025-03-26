@@ -1,21 +1,23 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
-import api from "../axios/axios";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
-import Table from "@mui/material/Table";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
+import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import api from "../axios/axios";
 
 function listEventos() {
   const [eventos, setEventos] = useState([]);
+  const navigate = useNavigate();
 
   async function getEventos() {
     await api.getEventos().then(
@@ -47,6 +49,11 @@ function listEventos() {
     }
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("authenticated");
+    navigate("/"); // Redireciona para a página inicial
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -72,6 +79,13 @@ function listEventos() {
         </Typography>
         <Button variant="outlined" component={Link} to="/evento/novo">
           Crie Eventos
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={handleLogout}
+          style={{ marginTop: "20px" }}
+        >
+          SAIR
         </Button>
       </Container>
     </ThemeProvider>
