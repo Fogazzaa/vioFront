@@ -87,7 +87,7 @@ const theme = createTheme({
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "100vh", // Garante que o Container ocupa a altura total da tela
+          minHeight: "80vh", // Garante que o Container ocupa a altura total da tela
         },
       },
     },

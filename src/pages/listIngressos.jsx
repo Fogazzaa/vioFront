@@ -92,7 +92,7 @@ const theme = createTheme({
           alignItems: "center",
           marginTop: 50,
           justifyContent: "flex-start",
-          minHeight: "100vh",
+          minHeight: "80vh",
         },
       },
     },

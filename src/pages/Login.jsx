@@ -34,7 +34,7 @@ function Login() {
     await api.postLogin(user).then(
       (response) => {
         alert(response.data.message);
-        localStorage.setItem("authenticated", "true");
+        localStorage.setItem("authenticated", true);
         navigate("/home");
       },
       (error) => {
