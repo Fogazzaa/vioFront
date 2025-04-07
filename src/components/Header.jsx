@@ -6,7 +6,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Header = () => {
   return (
-    <AppBar position="static" sx={{ backgroundColor: "gray" }}>
+    <AppBar position="static" sx={{ backgroundColor: "black" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
         <IconButton color="inherit" onClick={() => console.log("Perfil clicado!")}>
           <AccountCircleIcon fontSize="large" />
