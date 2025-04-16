@@ -34,9 +34,9 @@ function listUsuarios() {
 
   const navigate = useNavigate();
 
-  async function deleteUser(id) {
+  async function deleteUser(id_usuario) {
     try {
-      await api.deleteUser(id);
+      await api.deleteUser(id_usuario);
       await getUsers();
       showAlert("success", "Usuário Deletado");
     } catch (error) {
@@ -64,7 +64,7 @@ function listUsuarios() {
         <TableCell align="center">{user.email}</TableCell>
         <TableCell align="center">{user.cpf}</TableCell>
         <TableCell align="center">
-          <IconButton onClick={() => deleteUser(user.id)}>
+          <IconButton onClick={() => deleteUser(user.id_usuario)}>
             <DeleteOutlineIcon />
           </IconButton>
         </TableCell>

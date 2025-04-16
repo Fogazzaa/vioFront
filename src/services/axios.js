@@ -13,7 +13,7 @@ const sheets = {
   getOrganizadores: () => api.get("org/"),
   getIngressos: () => api.get("ing/"),
   postEvento: () => api.get("evento/"),
-  deleteUser: (id) => api.delete("user/", { params: { id } })
+  deleteUser: (id_usuario) => api.delete(`user/${id_usuario}`)
 };
 
 export default sheets;
