@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import api from "../axios/axios";
+import api from "../services/axios";
 
 function listEventos() {
   const [eventos, setEventos] = useState([]);

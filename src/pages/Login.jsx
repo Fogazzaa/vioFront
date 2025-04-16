@@ -8,7 +8,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../axios/axios";
+import api from "../services/axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
