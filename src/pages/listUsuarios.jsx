@@ -1,4 +1,4 @@
-import {Button, IconButton, Alert, Snackbar} from "@mui/material";
+import { Button, IconButton, Alert, Snackbar } from "@mui/material";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
@@ -12,11 +12,38 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import api from "../services/axios";
 
 function listUsuarios() {
   const [users, setUsers] = useState([]);
+
+  const [alert, setAlert] = useState({
+    open: false,
+    severity: "",
+    message: "",
+  });
+
+  const showAlert = (severity, message) => {
+    setAlert({ open: true, severity, message });
+  };
+
+  const handleCloseAlert = () => {
+    setAlert({ ...alert, open: false });
+  };
+
   const navigate = useNavigate();
+
+  async function deleteUser(id) {
+    try {
+      await api.deleteUser(id);
+      await getUsers();
+      showAlert("success", "Usuário Deletado");
+    } catch (error) {
+      console.log("Erro ", error);
+      showAlert("error", error.response.data.error);
+    }
+  }
 
   async function getUsers() {
     await api.getUsers().then(
@@ -36,6 +63,11 @@ function listUsuarios() {
         <TableCell align="center">{user.name}</TableCell>
         <TableCell align="center">{user.email}</TableCell>
         <TableCell align="center">{user.cpf}</TableCell>
+        <TableCell align="center">
+          <IconButton onClick={() => deleteUser(user.id)}>
+            <DeleteOutlineIcon />
+          </IconButton>
+        </TableCell>
       </TableRow>
     );
   });
@@ -48,32 +80,44 @@ function listUsuarios() {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container maxWidth="md">
-        {users.length === 0 ? (
-          <Typography>Carregando Usuários</Typography>
-        ) : (
-          <div>
-            <Typography variant="h5" gutterBottom>
-              Lista de usuários
-            </Typography>
-            <TableContainer component={Paper} style={{ width: "100%" }}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Nome</TableCell>
-                    <TableCell align="center">Email</TableCell>
-                    <TableCell align="center">CPF</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>{listUsersRows}</TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-        )}
-      </Container>
-    </ThemeProvider>
+    <div>
+      <Snackbar
+        open={alert.open}
+        autoHideDuration={3000}
+        onClose={handleCloseAlert}
+      >
+        <Alert onClose={handleCloseAlert} severity={alert.severity} sx={{ width: "100%" }}>
+          {alert.message}
+        </Alert>
+      </Snackbar>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Container maxWidth="md">
+          {users.length === 0 ? (
+            <Typography>Carregando Usuários</Typography>
+          ) : (
+            <div>
+              <Typography variant="h5" gutterBottom>
+                Lista de usuários
+              </Typography>
+              <TableContainer component={Paper} style={{ width: "100%" }}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Nome</TableCell>
+                      <TableCell align="center">Email</TableCell>
+                      <TableCell align="center">CPF</TableCell>
+                      <TableCell align="center">Deletar</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>{listUsersRows}</TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          )}
+        </Container>
+      </ThemeProvider>
+    </div>
   );
 }
 

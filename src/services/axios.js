@@ -9,10 +9,11 @@ const sheets = {
   postLogin:(user) => api.post("login/", user),
   postCadastro:(user) => api.post("user/", user),
   getUsers:()=>api.get("user/"),
-  getEventos: () => api.get("evento/"),
+  getEventos: () => api.get("eventos/"),
   getOrganizadores: () => api.get("org/"),
   getIngressos: () => api.get("ing/"),
   postEvento: () => api.get("evento/"),
+  deleteUser: (id) => api.delete("user/", { params: { id } })
 };
 
 export default sheets;

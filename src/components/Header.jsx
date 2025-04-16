@@ -17,7 +17,7 @@ const Header = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="static" sx={{ backgroundColor: "black" }}>
+      <AppBar position = "fixed" sx={{ backgroundColor: "black" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             variant="outlined"
