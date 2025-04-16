@@ -48,11 +48,6 @@ function listOrganizadores() {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("authenticated");
-    navigate("/"); // Redireciona para a página inicial
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -73,13 +68,6 @@ function listOrganizadores() {
             <TableBody>{listOrganizadoresRows}</TableBody>
           </Table>
         </TableContainer>
-        <Button
-          variant="outlined"
-          onClick={handleLogout}
-          style={{ marginTop: "20px" }}
-        >
-          SAIR
-        </Button>
       </Container>
     </ThemeProvider>
   );
