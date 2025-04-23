@@ -13,10 +13,14 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import ConfirmDelete from "../components/ConfirmDelete";
 import api from "../services/axios";
 
 function listUsuarios() {
   const [users, setUsers] = useState([]);
+
+  const [userToDelete, setUserToDelete] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const [alert, setAlert] = useState({
     open: false,
@@ -32,16 +36,23 @@ function listUsuarios() {
     setAlert({ ...alert, open: false });
   };
 
+  const OpenDeleteModal = (id_usuario, name) => {
+    setUserToDelete({ id_usuario: id_usuario, name: name });
+    setModalOpen(true);
+  };
+
   const navigate = useNavigate();
 
-  async function deleteUser(id_usuario) {
+  async function deleteUser() {
     try {
-      await api.deleteUser(id_usuario);
+      await api.deleteUser(userToDelete.id_usuario);
       await getUsers();
       showAlert("success", "Usuário Deletado");
+      setModalOpen(false);
     } catch (error) {
       console.log("Erro ", error);
       showAlert("error", error.response.data.error);
+      setModalOpen(false);
     }
   }
 
@@ -64,7 +75,9 @@ function listUsuarios() {
         <TableCell align="center">{user.email}</TableCell>
         <TableCell align="center">{user.cpf}</TableCell>
         <TableCell align="center">
-          <IconButton onClick={() => deleteUser(user.id_usuario)}>
+          <IconButton
+            onClick={() => OpenDeleteModal(user.id_usuario, user.name)}
+          >
             <DeleteOutlineIcon />
           </IconButton>
         </TableCell>
@@ -86,10 +99,20 @@ function listUsuarios() {
         autoHideDuration={3000}
         onClose={handleCloseAlert}
       >
-        <Alert onClose={handleCloseAlert} severity={alert.severity} sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleCloseAlert}
+          severity={alert.severity}
+          sx={{ width: "100%" }}
+        >
           {alert.message}
         </Alert>
       </Snackbar>
+      <ConfirmDelete 
+      open={modalOpen}
+      userName={userToDelete.name}
+      onConfirm={deleteUser}
+      onClose={() => setModalOpen(false)}
+       />
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Container maxWidth="md">
