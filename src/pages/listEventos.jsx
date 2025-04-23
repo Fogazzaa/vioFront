@@ -1,7 +1,10 @@
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -13,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import api from "../services/axios";
 
 function listEventos() {
@@ -31,6 +35,31 @@ function listEventos() {
     );
   }
 
+  async function deleteEvento(id_evento) {
+    try {
+      await api.deleteEvento(id_evento);
+      await getEventos();
+      showAlert("success", "Evento Deletado");
+    } catch (error) {
+      console.log("Erro ", error);
+      showAlert("error", error.response.data.error);
+    }
+  }
+
+  const [alert, setAlert] = useState({
+    open: false,
+    severity: "",
+    message: "",
+  });
+
+  const showAlert = (severity, message) => {
+    setAlert({ open: true, severity, message });
+  };
+
+  const handleCloseAlert = () => {
+    setAlert({ ...alert, open: false });
+  };
+
   const listEventosRows = eventos.map((evento) => {
     return (
       <TableRow key={evento.id_evento}>
@@ -38,6 +67,11 @@ function listEventos() {
         <TableCell align="center">{evento.descricao}</TableCell>
         <TableCell align="center">{evento.data_hora}</TableCell>
         <TableCell align="center">{evento.local}</TableCell>
+        <TableCell align="center">
+          <IconButton onClick={() => deleteEvento(evento.id_evento)}>
+            <DeleteOutlineIcon />
+          </IconButton>
+        </TableCell>
       </TableRow>
     );
   });
@@ -50,33 +84,49 @@ function listEventos() {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container maxWidth="md">
-        <Typography variant="h5" gutterBottom>
-          Lista de eventos
-        </Typography>
-        <TableContainer component={Paper} style={{ width: "100%" }}>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">Nome</TableCell>
-                <TableCell align="center">Descrição</TableCell>
-                <TableCell align="center">Data e Hora</TableCell>
-                <TableCell align="center">Local</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>{listEventosRows}</TableBody>
-          </Table>
-        </TableContainer>
-        <Typography variant="h6" style={{ marginTop: "20px" }}>
-          Crie Eventos
-        </Typography>
-        <Button variant="outlined" component={Link} to="/evento/novo">
-          Crie Eventos
-        </Button>
-      </Container>
-    </ThemeProvider>
+    <div>
+      <Snackbar
+        open={alert.open}
+        autoHideDuration={3000}
+        onClose={handleCloseAlert}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity={alert.severity}
+          sx={{ width: "100%" }}
+        >
+          {alert.message}
+        </Alert>
+      </Snackbar>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Container maxWidth="md">
+          <Typography variant="h5" gutterBottom>
+            Lista de eventos
+          </Typography>
+          <TableContainer component={Paper} style={{ width: "100%" }}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Nome</TableCell>
+                  <TableCell align="center">Descrição</TableCell>
+                  <TableCell align="center">Data e Hora</TableCell>
+                  <TableCell align="center">Local</TableCell>
+                  <TableCell align="center">Deletar</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{listEventosRows}</TableBody>
+            </Table>
+          </TableContainer>
+          <Typography variant="h6" style={{ marginTop: "20px" }}>
+            Crie Eventos
+          </Typography>
+          <Button variant="outlined" component={Link} to="/evento/novo">
+            Crie Eventos
+          </Button>
+        </Container>
+      </ThemeProvider>
+    </div>
   );
 }
 

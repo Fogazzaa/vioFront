@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://10.89.240.93:5000/api/v1/",
+  baseURL: "http://10.89.240.76:5000/api/v1/",
   headers: { accept: "application/json" },
 });
 
@@ -13,7 +13,10 @@ const sheets = {
   getOrganizadores: () => api.get("org/"),
   getIngressos: () => api.get("ing/"),
   postEvento: () => api.get("evento/"),
-  deleteUser: (id_usuario) => api.delete(`user/${id_usuario}`)
+  deleteUser: (id_usuario) => api.delete(`user/${id_usuario}`),
+  deleteEvento: (id_evento) => api.delete(`evento/${id_evento}`),
+  deleteIngresso: (id_ingresso) => api.delete(`ing/${id_ingresso}`),
+  deleteOrganizador: (id_organizador) => api.delete(`org/${id_organizador}`)
 };
 
 export default sheets;

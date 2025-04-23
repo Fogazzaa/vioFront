@@ -1,6 +1,10 @@
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -29,6 +33,31 @@ function listOrganizadores() {
     );
   }
 
+  async function deleteOrganizador(id_organizador) {
+    try {
+      await api.deleteOrganizador(id_organizador);
+      await getOrganizadores();
+      showAlert("success", "Organizador Deletado");
+    } catch (error) {
+      console.log("Erro ", error);
+      showAlert("error", error.response.data.error);
+    }
+  }
+
+  const [alert, setAlert] = useState({
+    open: false,
+    severity: "",
+    message: "",
+  });
+
+  const showAlert = (severity, message) => {
+    setAlert({ open: true, severity, message });
+  };
+
+  const handleCloseAlert = () => {
+    setAlert({ ...alert, open: false });
+  };
+
   const listOrganizadoresRows = organizadores.map((organizador) => {
     return (
       <TableRow key={organizador.id_organizador}>
@@ -36,6 +65,13 @@ function listOrganizadores() {
         <TableCell align="center">{organizador.email}</TableCell>
         <TableCell align="center">{organizador.telefone}</TableCell>
         <TableCell align="center">{organizador.senha}</TableCell>
+        <TableCell align="center">
+          <IconButton
+            onClick={() => deleteOrganizador(organizador.id_organizador)}
+          >
+            <DeleteOutlineIcon />
+          </IconButton>
+        </TableCell>
       </TableRow>
     );
   });
@@ -48,27 +84,43 @@ function listOrganizadores() {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container maxWidth="md">
-        <Typography variant="h5" gutterBottom>
-          Lista de Organizadores
-        </Typography>
-        <TableContainer component={Paper} style={{ width: "100%" }}>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">Nome</TableCell>
-                <TableCell align="center">E-mail</TableCell>
-                <TableCell align="center">Telefone</TableCell>
-                <TableCell align="center">Senha</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>{listOrganizadoresRows}</TableBody>
-          </Table>
-        </TableContainer>
-      </Container>
-    </ThemeProvider>
+    <div>
+      <Snackbar
+        open={alert.open}
+        autoHideDuration={3000}
+        onClose={handleCloseAlert}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity={alert.severity}
+          sx={{ width: "100%" }}
+        >
+          {alert.message}
+        </Alert>
+      </Snackbar>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Container maxWidth="md">
+          <Typography variant="h5" gutterBottom>
+            Lista de Organizadores
+          </Typography>
+          <TableContainer component={Paper} style={{ width: "100%" }}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Nome</TableCell>
+                  <TableCell align="center">E-mail</TableCell>
+                  <TableCell align="center">Telefone</TableCell>
+                  <TableCell align="center">Senha</TableCell>
+                  <TableCell align="center">Deletar</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{listOrganizadoresRows}</TableBody>
+            </Table>
+          </TableContainer>
+        </Container>
+      </ThemeProvider>
+    </div>
   );
 }
 
