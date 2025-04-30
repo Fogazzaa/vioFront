@@ -17,6 +17,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import CriarIngressoModal from "../components/CriarIngressoModal";
+import AddIcon from "@mui/icons-material/AddCircleOutline";
 import api from "../services/axios";
 
 function listEventos() {
@@ -60,6 +62,19 @@ function listEventos() {
     setAlert({ ...alert, open: false });
   };
 
+  const [eventoSelecionado, setEventoSelecionado] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const abrirModalIngresso = (evento) => {
+    setEventoSelecionado(evento);
+    setModalOpen(true);
+  };
+
+  const fecharModalIngresso = () => {
+    setModalOpen(false);
+    setEventoSelecionado("");
+  };
+
   const listEventosRows = eventos.map((evento) => {
     return (
       <TableRow key={evento.id_evento}>
@@ -70,6 +85,11 @@ function listEventos() {
         <TableCell align="center">
           <IconButton onClick={() => deleteEvento(evento.id_evento)}>
             <DeleteOutlineIcon />
+          </IconButton>
+        </TableCell>
+        <TableCell align="center">
+          <IconButton onClick={() => abrirModalIngresso(evento)}>
+            <AddIcon />
           </IconButton>
         </TableCell>
       </TableRow>
@@ -98,6 +118,11 @@ function listEventos() {
           {alert.message}
         </Alert>
       </Snackbar>
+      <CriarIngressoModal
+        open={modalOpen}
+        onClose={fecharModalIngresso}
+        eventoSelecionado={eventoSelecionado}
+      />
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Container maxWidth="md">
@@ -113,6 +138,7 @@ function listEventos() {
                   <TableCell align="center">Data e Hora</TableCell>
                   <TableCell align="center">Local</TableCell>
                   <TableCell align="center">Deletar</TableCell>
+                  <TableCell align="center">Criar Ingresso</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>{listEventosRows}</TableBody>
