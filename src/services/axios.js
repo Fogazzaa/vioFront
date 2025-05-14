@@ -5,10 +5,21 @@ const api = axios.create({
   headers: { accept: "application/json" },
 });
 
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 const sheets = {
-  postLogin:(user) => api.post("login/", user),
-  postCadastro:(user) => api.post("user/", user),
-  getUsers:()=>api.get("user/"),
+  postLogin: (user) => api.post("login/", user),
+  postCadastro: (user) => api.post("user/", user),
+  getUsers: () => api.get("user/"),
   getEventos: () => api.get("eventos/"),
   getOrganizadores: () => api.get("org/"),
   getIngressos: () => api.get("ing/"),
