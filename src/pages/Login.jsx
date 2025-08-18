@@ -6,8 +6,9 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Alert, Snackbar } from "@mui/material";
 import api from "../services/axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -31,24 +32,62 @@ function Login() {
   };
 
   async function Login() {
-    await api.postLogin(user).then(
-      (response) => {
-        alert(response.data.message);
+    try {
+      const response = await api.postLogin(user);
+      showAlert("success", response.data.message);
+      if (response.data.token) {
         localStorage.setItem("authenticated", true);
         localStorage.setItem("token", response.data.token);
         navigate("/home");
-      },
-      (error) => {
-        console.log(error);
-        alert(error.response.data.error);
       }
-    );
+    } catch (error) {
+      console.log(error);
+      showAlert("error", error.response.data.error);
+      setModalOpen(false);
+    }
   }
+
+  useEffect(() => {
+    const refreshToken = localStorage.getItem("refreshtoken")
+
+    if(refreshToken){
+      showAlert("warning", "Sua sessão expirou, Faça login novamente")
+      localStorage.removeItem("refreshtoken")
+    }
+
+  }, []);
+
+  const [alert, setAlert] = useState({
+    open: false,
+    severity: "",
+    message: "",
+  });
+
+  const showAlert = (severity, message) => {
+    setAlert({ open: true, severity, message });
+  };
+
+  const handleCloseAlert = () => {
+    setAlert({ ...alert, open: false });
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container component="main" maxWidth="xs">
+        <Snackbar
+          open={alert.open}
+          autoHideDuration={3000}
+          onClose={handleCloseAlert}
+        >
+          <Alert
+            onClose={handleCloseAlert}
+            severity={alert.severity}
+            sx={{ width: "100%" }}
+          >
+            {alert.message}
+          </Alert>
+        </Snackbar>
         <Box
           sx={{
             display: "flex",

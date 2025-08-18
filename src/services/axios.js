@@ -16,6 +16,29 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      if (error.response.status === 401 && error.response.data.auth === false) {
+        localStorage.setItem("refreshtoken", true);
+        localStorage.removeItem("token");
+        localStorage.removeItem("authenticated");
+        window.location.href = "/";
+      } else if (
+        error.response.status === 403 &&
+        error.response.data.auth === false
+      ) {
+        localStorage.setItem("refreshtoken", true);
+        localStorage.removeItem("token");
+        localStorage.removeItem("authenticated");
+        window.location.href = "/";
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 const sheets = {
   postLogin: (user) => api.post("login/", user),
   postCadastro: (user) => api.post("user/", user),
@@ -32,19 +55,19 @@ const sheets = {
 
   createEvento: (form, imagem) => {
     const data = new FormData();
-    for (let key in form){
-      data.append(key, form[key])
+    for (let key in form) {
+      data.append(key, form[key]);
     }
-    if(imagem){
-      data.append("imagem", imagem)
+    if (imagem) {
+      data.append("imagem", imagem);
     }
     return api.post("/evento", data, {
-      headers:{
+      headers: {
         "Content-Type": "multpart/form-data",
-        accept: "application/json"
-      }
-    })
-  }
+        accept: "application/json",
+      },
+    });
+  },
 };
 
 export default sheets;
