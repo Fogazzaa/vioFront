@@ -46,6 +46,12 @@ function Home() {
         <Button variant="outlined" component={Link} to="/ingressos">
           Lista de Ingressos
         </Button>
+        <Typography variant="h6" gutterBottom>
+          Gráfico de Eventos
+        </Typography>
+        <Button variant="outlined" component={Link} to="/dashboard">
+          Gráfico de Eventos
+        </Button>
       </Container>
     </ThemeProvider>
   );

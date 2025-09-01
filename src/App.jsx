@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import DashBoard from "./pages/Dashboard";
 import PostEvento from "./pages/postEventos";
 import ListUsuarios from "./pages/listUsuarios";
 import ListEventos from "./pages/listEventos";
@@ -21,6 +22,7 @@ function App() {
           <Route path="/eventos" element={<ProtectedRoute><ListEventos /></ProtectedRoute>} />
           <Route path="/ingressos" element={<ProtectedRoute><ListIngressos /></ProtectedRoute>} />
           <Route path="/organizadores" element={<ProtectedRoute><ListOrganizadores /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><DashBoard /></ProtectedRoute>} />
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
