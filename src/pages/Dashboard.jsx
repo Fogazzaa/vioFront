@@ -54,7 +54,30 @@ function Dashboard() {
       {
         label: "Eventos por Organizador",
         data: Object.values(eventosPorOrganizador),
-        backgroundColor: "rgba(202, 53, 53, 1)",
+        backgroundColor: "rgba(0, 0, 0, 1)",
+      },
+    ],
+  };
+
+  const usuariosPorMes = {};
+  usuarios.forEach((usuario) => {
+    const mes = new Date(usuario.data_nascimento).getMonth() + 1;
+    usuariosPorMes[mes] = (usuariosPorMes[mes] || 0) + 1;
+  });
+
+  const pieData = {
+    labels: Object.keys(usuariosPorMes).map((m) => `Mês ${m}`),
+    datasets: [
+      {
+        data: Object.values(usuariosPorMes),
+        backgroundColor: [
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56",
+          "#4CAF50",
+          "#FF9800",
+          "#9C27B0",
+        ],
       },
     ],
   };
@@ -65,7 +88,9 @@ function Dashboard() {
       <div style={{ width: "600px", marginBottom: 40 }}>
         <Bar data={barData} />
       </div>
-      <div></div>
+      <div style={{ width: "400px" }}>
+        <Pie data={pieData} />
+      </div>
     </div>
   );
 }
